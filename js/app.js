@@ -14,33 +14,31 @@ let manScore = 0;
 let src = ["images/rock.png", "images/paper.png", "images/scissors.png"];
 let arrayNumKeyPc = 0;
 let arrayNumKeyMan = 1;
-let interval = setInterval(setInter, 200);
+let interval;
+let enable = false;
 
 //event listeners
 
 eventListeners();
 
 function eventListeners() {
-    rock.addEventListener('click', function taha() {
-        Survey(1);
-        removeListener(taha);
-    });
-    paper.addEventListener('click', function taha() {
-        Survey(2)
-        removeListener(taha);
-    });
-    scissors.addEventListener('click', function taha() {
-        Survey(3)
-        removeListener(taha);
-    });
-
-    startBtn.addEventListener('click', startBtnFunc)
+    startBtn.addEventListener('click', startBtnFunction);
 }
 
-function removeListener(taha){
-    rock.removeEventListener('click',taha);
-    paper.removeEventListener('click',taha);
-    scissors.removeEventListener('click',taha);
+function startBtnFunction() {
+    if (enable === false) {
+        enable = true;
+        rock.addEventListener('click', function taha() {
+            Survey(1);
+        });
+        paper.addEventListener('click', function taha() {
+            Survey(2)
+        });
+        scissors.addEventListener('click', function taha() {
+            Survey(3)
+        });
+        interval = setInterval(setInter, 200);
+    }
 }
 
 function createRandomNumber() {
@@ -48,28 +46,24 @@ function createRandomNumber() {
 }
 
 function Survey(x) {
-    createRandomNumber();
-    if (x === num) {
-        console.log('draw')
-    } else if (x === 1 && num === 2 || x === 2 && num === 3 || x === 3 && num === 1) {
-        pcScore += 1;
-        pc.innerHTML = pcScore;
-    } else if (x === 1 && num === 3 || x === 2 && num === 1 || x === 3 && num === 2) {
-        manScore += 1;
-        man.innerHTML = manScore;
+    if (enable) {
+        enable = false;
+        createRandomNumber();
+        if (x === num) {
+            manScore += 0;
+            pcScore += 0;
+        } else if (x === 1 && num === 2 || x === 2 && num === 3 || x === 3 && num === 1) {
+            pcScore += 1;
+            pc.innerHTML = pcScore;
+        } else if (x === 1 && num === 3 || x === 2 && num === 1 || x === 3 && num === 2) {
+            manScore += 1;
+            man.innerHTML = manScore;
+        }
+        clearInterval(interval);
+        pcBattle.src = src[num - 1];
+        manBattle.src = src[x - 1];
     }
-    myStopFunction();
-    pcBattle.src = src[num - 1];
-    manBattle.src = src[x - 1];
-    startBtn.addEventListener('click', startBtnFunc);
 }
-
-function startBtnFunc() {
-    interval = setInterval(setInter, 200);
-    eventListeners();
-    startBtn.removeEventListener('click', startBtnFunc);
-}
-
 
 
 //****************************************************************
@@ -93,6 +87,3 @@ function setInter() {
 }
 
 //****************************************************************
-function myStopFunction() {
-    clearInterval(interval);
-}
